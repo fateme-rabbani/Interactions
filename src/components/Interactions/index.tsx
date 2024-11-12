@@ -1,9 +1,9 @@
-import { ReactElement } from "react";
+import { FC, ReactElement } from "react";
 
 interface InteractionsProps {
   selectedInteraction: ReactElement | null;
 }
-const Interactions = ({ selectedInteraction }: InteractionsProps) => {
+const Interactions: FC<InteractionsProps> = ({ selectedInteraction }) => {
   return (
     <div className="flex flex-col gap-2 p-5">
       <div className="flex flex-col gap-5">
