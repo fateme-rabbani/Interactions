@@ -1,56 +1,74 @@
-import { useState } from "react";
-
-interface MultiItem {
-  id: number;
-  value: string;
-  isEnable: boolean;
-}
+import { StudioInteractionProps } from "../Interactions";
 
 let id = 0;
-const makeId = () => ++id;
+const makeId = () => (++id).toString();
 
-const MultipleChoiceInteractionStudio = () => {
-  const [value, setValue] = useState<MultiItem[]>([
-    { id: makeId(), value: "test", isEnable: false },
-  ]);
-
-  const handleEnable = (id: number, isEnable: boolean) => {
-    setValue(
-      value.map((item) => (item.id === id ? { ...item, isEnable } : item))
-    );
+export default function MultipleChoiceInteractionStudio({
+  value,
+  onChange,
+}: StudioInteractionProps<"MultipleChoice">) {
+  const handleEnable = (id: string, isCorrect: boolean) => {
+    onChange({
+      ...value,
+      interactionInfo: {
+        ...value.interactionInfo,
+        choices: value.interactionInfo.choices.map((item) =>
+          item.id === id ? { ...item, isCorrect } : item
+        ),
+      },
+    });
   };
 
-  const handleTextChange = (id: number, newValue: string) => {
-    setValue(
-      value.map((item) =>
-        item.id === id ? { ...item, value: newValue } : item
-      )
-    );
+  const handleTextChange = (id: string, content: string) => {
+    onChange({
+      ...value,
+      interactionInfo: {
+        ...value.interactionInfo,
+        choices: value.interactionInfo.choices.map((item) =>
+          item.id === id ? { ...item, content } : item
+        ),
+      },
+    });
   };
 
   const addChoice = () => {
-    setValue([...value, { id: makeId(), value: "", isEnable: false }]);
+    onChange({
+      ...value,
+      interactionInfo: {
+        ...value.interactionInfo,
+        choices: [
+          ...value.interactionInfo.choices,
+          { id: makeId(), content: "", isCorrect: false },
+        ],
+      },
+    });
   };
 
-  const removeChoice = (id: number) => {
-    setValue(value.filter((item) => item.id !== id));
+  const removeChoice = (id: string) => {
+    onChange({
+      ...value,
+      interactionInfo: {
+        ...value.interactionInfo,
+        choices: value.interactionInfo.choices.filter((item) => item.id !== id),
+      },
+    });
   };
 
   return (
     <div className="flex flex-col gap-5">
-      {value.map((item, i) => (
+      {value.interactionInfo.choices.map((item, i) => (
         <div key={i}>
           <span>#choice{item.id}</span>
           <div className="flex gap-3">
             <input
               type="checkbox"
               id={`enable-${item.id}`}
-              checked={item.isEnable}
+              checked={item.isCorrect}
               onChange={(e) => handleEnable(item.id, e.target.checked)}
             />
             <input
               type="text"
-              value={item.value}
+              value={item.content}
               onChange={(e) => handleTextChange(item.id, e.target.value)}
             />
             <button
@@ -86,6 +104,4 @@ const MultipleChoiceInteractionStudio = () => {
       </label>
     </div>
   );
-};
-
-export default MultipleChoiceInteractionStudio;
+}
