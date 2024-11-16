@@ -1,4 +1,4 @@
-import { StudioInteractionProps } from "../Interactions";
+import { StudioInteractionProps } from "../StudioInteraction";
 
 let id = 0;
 const makeId = () => (++id).toString();

@@ -1,4 +1,4 @@
-import { StudioInteractionProps } from "../Interactions";
+import { StudioInteractionProps } from "../StudioInteraction";
 
 export default function TrueOrFalseInteractionStudio({
   value,
