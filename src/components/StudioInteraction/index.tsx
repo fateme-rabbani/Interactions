@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Interaction, InteractionType } from "../../App";
-// import FillTheBlankInteractionStudio from "../FillTheBlank";
 import FreeResponseInteractionStudio from "../FreeResponse";
 import MatchingInteractionStudio from "../Maching";
 import MultipleChoiceInteractionStudio from "../MultipleChoice";
@@ -15,7 +14,7 @@ export type StudioInteractionComponent<Type extends InteractionType> = FC<
   StudioInteractionProps<Type>
 >;
 
-const gholamMap = {
+const interactionComponents = {
   FreeResponse: FreeResponseInteractionStudio,
   MultipleChoice: MultipleChoiceInteractionStudio,
   TrueOrFalse: TrueOrFalseInteractionStudio,
@@ -26,7 +25,7 @@ export default function StudioInteraction<Type extends InteractionType>({
   value,
   onChange,
 }: StudioInteractionProps<Type>) {
-  const StudioComponent = gholamMap[
+  const StudioComponent = interactionComponents[
     value.type
   ] as StudioInteractionComponent<Type>;
 

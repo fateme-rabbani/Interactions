@@ -1,48 +1,12 @@
-import { StudioInteractionProps } from "../StudioInteraction";
+import { StudioInteractionComponent } from "../StudioInteraction";
 
 let id = 0;
 const makeId = () => (++id).toString();
 
-export default function MatchingInteractionStudio({
+const MatchingInteractionStudio: StudioInteractionComponent<"Matching"> = ({
   value,
   onChange,
-}: StudioInteractionProps<"Matching">) {
-  const handleTextChangeFirst = (id: string, val: string) => {
-    onChange({
-      ...value,
-      interactionInfo: {
-        ...value.interactionInfo,
-        maching: value.interactionInfo.maching.map((item) =>
-          item.id === id ? { ...item, firstVal: val } : item
-        ),
-      },
-    });
-  };
-
-  const handleTextChangeSecond = (id: string, val: string) => {
-    onChange({
-      ...value,
-      interactionInfo: {
-        ...value.interactionInfo,
-        maching: value.interactionInfo.maching.map((item) =>
-          item.id === id ? { ...item, secondVal: val } : item
-        ),
-      },
-    });
-  };
-
-  const addChoice = () => {
-    onChange({
-      ...value,
-      interactionInfo: {
-        ...value.interactionInfo,
-        maching: [
-          ...value.interactionInfo.maching,
-          { id: makeId(), firstVal: "", secondVal: "" },
-        ],
-      },
-    });
-  };
+}) => {
   return (
     <div className="flex flex-col gap-3">
       {value.interactionInfo.maching.map((item, i) => (
@@ -53,7 +17,19 @@ export default function MatchingInteractionStudio({
               <input
                 type="text"
                 value={item.firstVal}
-                onChange={(e) => handleTextChangeFirst(item.id, e.target.value)}
+                onChange={(e) => {
+                  onChange({
+                    ...value,
+                    interactionInfo: {
+                      ...value.interactionInfo,
+                      maching: value.interactionInfo.maching.map((mach) =>
+                        mach.id === item.id
+                          ? { ...mach, firstVal: e.target.value }
+                          : mach
+                      ),
+                    },
+                  });
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -61,9 +37,19 @@ export default function MatchingInteractionStudio({
               <input
                 type="text"
                 value={item.secondVal}
-                onChange={(e) =>
-                  handleTextChangeSecond(item.id, e.target.value)
-                }
+                onChange={(e) => {
+                  onChange({
+                    ...value,
+                    interactionInfo: {
+                      ...value.interactionInfo,
+                      maching: value.interactionInfo.maching.map((mach) =>
+                        mach.id === item.id
+                          ? { ...mach, secondVal: e.target.value }
+                          : mach
+                      ),
+                    },
+                  });
+                }}
               />
             </div>
           </div>
@@ -77,10 +63,23 @@ export default function MatchingInteractionStudio({
           borderRadius: 5,
           width: 120,
         }}
-        onClick={() => addChoice()}
+        onClick={() => {
+          onChange({
+            ...value,
+            interactionInfo: {
+              ...value.interactionInfo,
+              maching: [
+                ...value.interactionInfo.maching,
+                { id: makeId(), firstVal: "", secondVal: "" },
+              ],
+            },
+          });
+        }}
       >
         add choice
       </button>
     </div>
   );
-}
+};
+
+export default MatchingInteractionStudio;

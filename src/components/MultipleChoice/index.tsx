@@ -1,75 +1,51 @@
-import { StudioInteractionProps } from "../StudioInteraction";
+import { StudioInteractionComponent } from "../StudioInteraction";
 
 let id = 0;
 const makeId = () => (++id).toString();
 
-export default function MultipleChoiceInteractionStudio({
-  value,
-  onChange,
-}: StudioInteractionProps<"MultipleChoice">) {
-  const handleEnable = (id: string, isCorrect: boolean) => {
-    onChange({
-      ...value,
-      interactionInfo: {
-        ...value.interactionInfo,
-        choices: value.interactionInfo.choices.map((item) =>
-          item.id === id ? { ...item, isCorrect } : item
-        ),
-      },
-    });
-  };
-
-  const handleTextChange = (id: string, content: string) => {
-    onChange({
-      ...value,
-      interactionInfo: {
-        ...value.interactionInfo,
-        choices: value.interactionInfo.choices.map((item) =>
-          item.id === id ? { ...item, content } : item
-        ),
-      },
-    });
-  };
-
-  const addChoice = () => {
-    onChange({
-      ...value,
-      interactionInfo: {
-        ...value.interactionInfo,
-        choices: [
-          ...value.interactionInfo.choices,
-          { id: makeId(), content: "", isCorrect: false },
-        ],
-      },
-    });
-  };
-
-  const removeChoice = (id: string) => {
-    onChange({
-      ...value,
-      interactionInfo: {
-        ...value.interactionInfo,
-        choices: value.interactionInfo.choices.filter((item) => item.id !== id),
-      },
-    });
-  };
-
+const MultipleChoiceInteractionStudio: StudioInteractionComponent<
+  "MultipleChoice"
+> = ({ value, onChange }) => {
   return (
     <div className="flex flex-col gap-5">
-      {value.interactionInfo.choices.map((item, i) => (
+      {value.interactionInfo.choices.map((choice, i) => (
         <div key={i}>
-          <span>#choice{item.id}</span>
+          <span>#choice{choice.id}</span>
           <div className="flex gap-3">
             <input
               type="checkbox"
-              id={`enable-${item.id}`}
-              checked={item.isCorrect}
-              onChange={(e) => handleEnable(item.id, e.target.checked)}
+              id={`enable-${choice.id}`}
+              checked={choice.isCorrect}
+              onChange={(e) => {
+                onChange({
+                  ...value,
+                  interactionInfo: {
+                    ...value.interactionInfo,
+                    choices: value.interactionInfo.choices.map((item) =>
+                      item.id === choice.id
+                        ? { ...item, isCorrect: e.target.checked }
+                        : item
+                    ),
+                  },
+                });
+              }}
             />
             <input
               type="text"
-              value={item.content}
-              onChange={(e) => handleTextChange(item.id, e.target.value)}
+              value={choice.content}
+              onChange={(e) => {
+                onChange({
+                  ...value,
+                  interactionInfo: {
+                    ...value.interactionInfo,
+                    choices: value.interactionInfo.choices.map((item) =>
+                      item.id === choice.id
+                        ? { ...item, content: e.target.value }
+                        : item
+                    ),
+                  },
+                });
+              }}
             />
             <button
               style={{
@@ -78,7 +54,17 @@ export default function MultipleChoiceInteractionStudio({
                 borderRadius: 5,
                 width: 120,
               }}
-              onClick={() => removeChoice(item.id)}
+              onClick={() => {
+                onChange({
+                  ...value,
+                  interactionInfo: {
+                    ...value.interactionInfo,
+                    choices: value.interactionInfo.choices.filter(
+                      (item) => item.id !== choice.id
+                    ),
+                  },
+                });
+              }}
             >
               remove
             </button>
@@ -93,7 +79,18 @@ export default function MultipleChoiceInteractionStudio({
           borderRadius: 5,
           width: 120,
         }}
-        onClick={addChoice}
+        onClick={() => {
+          onChange({
+            ...value,
+            interactionInfo: {
+              ...value.interactionInfo,
+              choices: [
+                ...value.interactionInfo.choices,
+                { id: makeId(), content: "", isCorrect: false },
+              ],
+            },
+          });
+        }}
       >
         add choice
       </button>
@@ -104,4 +101,6 @@ export default function MultipleChoiceInteractionStudio({
       </label>
     </div>
   );
-}
+};
+
+export default MultipleChoiceInteractionStudio;

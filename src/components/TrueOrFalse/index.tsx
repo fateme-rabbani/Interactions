@@ -1,9 +1,8 @@
-import { StudioInteractionProps } from "../StudioInteraction";
+import { StudioInteractionComponent } from "../StudioInteraction";
 
-export default function TrueOrFalseInteractionStudio({
-  value,
-  onChange,
-}: StudioInteractionProps<"TrueOrFalse">) {
+const TrueOrFalseInteractionStudio: StudioInteractionComponent<
+  "TrueOrFalse"
+> = ({ value, onChange }) => {
   const handleChange = (isTrue: boolean) => {
     onChange({
       ...value,
@@ -40,4 +39,6 @@ export default function TrueOrFalseInteractionStudio({
       </div>
     </div>
   );
-}
+};
+
+export default TrueOrFalseInteractionStudio;
