@@ -42,7 +42,12 @@ export default function StudioInteraction<Type extends InteractionType>({
           />
         </div>
 
-        <StudioComponent {...{ value, onChange }} />
+        <StudioComponent
+          value={value.interactionInfo}
+          onChange={(interactionInfo) =>
+            onChange({ ...value, interactionInfo })
+          }
+        />
 
         <div className="flex flex-col gap-2">
           <label htmlFor="solution">solution</label>
