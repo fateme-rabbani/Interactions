@@ -1,17 +1,22 @@
 import { FC } from "react";
-import { Interaction, InteractionType } from "../../App";
-import FreeResponseInteractionStudio from "../FreeResponse";
-import MatchingInteractionStudio from "../Maching";
-import MultipleChoiceInteractionStudio from "../MultipleChoice";
-import TrueOrFalseInteractionStudio from "../TrueOrFalse";
+import { Interaction, InteractionInfo, InteractionType } from "../../App";
+import FreeResponseInteractionStudio from "../FreeResponse/InteractionStudio";
+import MatchingInteractionStudio from "../Maching/InteractionStudio";
+import MultipleChoiceInteractionStudio from "../MultipleChoice/InteractionStudio";
+import TrueOrFalseInteractionStudio from "../TrueOrFalse/InteractionStudio";
 
 export interface StudioInteractionProps<Type extends InteractionType> {
   value: Interaction<Type>;
   onChange(value: Interaction<Type>): void;
 }
 
+export interface InteractionComponentProps<Type extends InteractionType> {
+  value: InteractionInfo<Type>;
+  onChange(value: InteractionInfo<Type>): void;
+}
+
 export type StudioInteractionComponent<Type extends InteractionType> = FC<
-  StudioInteractionProps<Type>
+  InteractionComponentProps<Type>
 >;
 
 const interactionComponents = {

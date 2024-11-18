@@ -10,11 +10,10 @@ const FreeResponseInteractionStudio: StudioInteractionComponent<
       id="correctAnswer"
       onChange={(e) =>
         onChange({
-          ...value,
-          interactionInfo: { correctAnswer: e.target.value },
+          correctAnswer: e.target.value,
         })
       }
-      value={value.interactionInfo.correctAnswer}
+      value={value.correctAnswer}
     />
   </div>
 );

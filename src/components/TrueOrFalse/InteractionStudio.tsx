@@ -5,8 +5,7 @@ const TrueOrFalseInteractionStudio: StudioInteractionComponent<
 > = ({ value, onChange }) => {
   const handleChange = (isTrue: boolean) => {
     onChange({
-      ...value,
-      interactionInfo: { isTrue },
+      isTrue,
     });
   };
 
@@ -20,7 +19,7 @@ const TrueOrFalseInteractionStudio: StudioInteractionComponent<
             id="true"
             name="answer"
             value="true"
-            checked={value.interactionInfo.isTrue === true}
+            checked={value.isTrue === true}
             onChange={() => handleChange(true)}
           />
           <label htmlFor="true">true</label>
@@ -31,7 +30,7 @@ const TrueOrFalseInteractionStudio: StudioInteractionComponent<
             id="false"
             name="answer"
             value="false"
-            checked={value.interactionInfo.isTrue === false}
+            checked={value.isTrue === false}
             onChange={() => handleChange(false)}
           />
           <label htmlFor="false">false</label>

@@ -9,7 +9,7 @@ const MatchingInteractionStudio: StudioInteractionComponent<"Matching"> = ({
 }) => {
   return (
     <div className="flex flex-col gap-3">
-      {value.interactionInfo.maching.map((item, i) => (
+      {value.maching.map((item, i) => (
         <div key={i}>
           <div className="flex gap-5">
             <div className="flex flex-col gap-2">
@@ -20,14 +20,11 @@ const MatchingInteractionStudio: StudioInteractionComponent<"Matching"> = ({
                 onChange={(e) => {
                   onChange({
                     ...value,
-                    interactionInfo: {
-                      ...value.interactionInfo,
-                      maching: value.interactionInfo.maching.map((mach) =>
-                        mach.id === item.id
-                          ? { ...mach, firstVal: e.target.value }
-                          : mach
-                      ),
-                    },
+                    maching: value.maching.map((mach) =>
+                      mach.id === item.id
+                        ? { ...mach, firstVal: e.target.value }
+                        : mach
+                    ),
                   });
                 }}
               />
@@ -40,14 +37,11 @@ const MatchingInteractionStudio: StudioInteractionComponent<"Matching"> = ({
                 onChange={(e) => {
                   onChange({
                     ...value,
-                    interactionInfo: {
-                      ...value.interactionInfo,
-                      maching: value.interactionInfo.maching.map((mach) =>
-                        mach.id === item.id
-                          ? { ...mach, secondVal: e.target.value }
-                          : mach
-                      ),
-                    },
+                    maching: value.maching.map((mach) =>
+                      mach.id === item.id
+                        ? { ...mach, secondVal: e.target.value }
+                        : mach
+                    ),
                   });
                 }}
               />
@@ -66,13 +60,10 @@ const MatchingInteractionStudio: StudioInteractionComponent<"Matching"> = ({
         onClick={() => {
           onChange({
             ...value,
-            interactionInfo: {
-              ...value.interactionInfo,
-              maching: [
-                ...value.interactionInfo.maching,
-                { id: makeId(), firstVal: "", secondVal: "" },
-              ],
-            },
+            maching: [
+              ...value.maching,
+              { id: makeId(), firstVal: "", secondVal: "" },
+            ],
           });
         }}
       >

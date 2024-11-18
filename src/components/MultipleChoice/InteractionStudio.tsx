@@ -6,9 +6,10 @@ const makeId = () => (++id).toString();
 const MultipleChoiceInteractionStudio: StudioInteractionComponent<
   "MultipleChoice"
 > = ({ value, onChange }) => {
+  console.log(value);
   return (
     <div className="flex flex-col gap-5">
-      {value.interactionInfo.choices.map((choice, i) => (
+      {value.choices.map((choice, i) => (
         <div key={i}>
           <span>#choice{choice.id}</span>
           <div className="flex gap-3">
@@ -19,14 +20,11 @@ const MultipleChoiceInteractionStudio: StudioInteractionComponent<
               onChange={(e) => {
                 onChange({
                   ...value,
-                  interactionInfo: {
-                    ...value.interactionInfo,
-                    choices: value.interactionInfo.choices.map((item) =>
-                      item.id === choice.id
-                        ? { ...item, isCorrect: e.target.checked }
-                        : item
-                    ),
-                  },
+                  choices: value.choices.map((item) =>
+                    item.id === choice.id
+                      ? { ...item, isCorrect: e.target.checked }
+                      : item
+                  ),
                 });
               }}
             />
@@ -36,14 +34,11 @@ const MultipleChoiceInteractionStudio: StudioInteractionComponent<
               onChange={(e) => {
                 onChange({
                   ...value,
-                  interactionInfo: {
-                    ...value.interactionInfo,
-                    choices: value.interactionInfo.choices.map((item) =>
-                      item.id === choice.id
-                        ? { ...item, content: e.target.value }
-                        : item
-                    ),
-                  },
+                  choices: value.choices.map((item) =>
+                    item.id === choice.id
+                      ? { ...item, content: e.target.value }
+                      : item
+                  ),
                 });
               }}
             />
@@ -57,12 +52,9 @@ const MultipleChoiceInteractionStudio: StudioInteractionComponent<
               onClick={() => {
                 onChange({
                   ...value,
-                  interactionInfo: {
-                    ...value.interactionInfo,
-                    choices: value.interactionInfo.choices.filter(
-                      (item) => item.id !== choice.id
-                    ),
-                  },
+                  choices: value.choices.filter(
+                    (item) => item.id !== choice.id
+                  ),
                 });
               }}
             >
@@ -82,13 +74,10 @@ const MultipleChoiceInteractionStudio: StudioInteractionComponent<
         onClick={() => {
           onChange({
             ...value,
-            interactionInfo: {
-              ...value.interactionInfo,
-              choices: [
-                ...value.interactionInfo.choices,
-                { id: makeId(), content: "", isCorrect: false },
-              ],
-            },
+            choices: [
+              ...value.choices,
+              { id: makeId(), content: "", isCorrect: false },
+            ],
           });
         }}
       >
