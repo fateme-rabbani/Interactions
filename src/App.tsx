@@ -1,9 +1,8 @@
 import { useState } from "react";
 import StudioInteraction from "./components/StudioInteraction";
+import ExamInteraction from "./components/ExamInteraction";
 
-// wide - narrow
-
-// string - 'FreeResponse' | 'Gholam'
+export type QuestionType = "studio" | "exam";
 
 const interactionTypes = [
   "FreeResponse",
@@ -50,6 +49,8 @@ export interface Interaction<Type extends InteractionType> {
 }
 
 export default function App() {
+  const [selectedQuestionType, setSelectedQuestionType] =
+    useState<QuestionType | null>(null);
   const [selectedInteractionType, setSelectedInteractionType] =
     useState<InteractionType | null>(null);
   const [interactionData, setInteractionData] =
@@ -58,28 +59,53 @@ export default function App() {
   return (
     <div className="flex flex-col gap-20 w-full p-10">
       {!selectedInteractionType && (
-        <div className="flex flex-col gap-5">
-          {interactionTypes.map((interactionType, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setSelectedInteractionType(interactionType);
-                setInteractionData(initialData(interactionType));
-              }}
-              style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
-            >
-              {interactionType}
-            </button>
-          ))}
-        </div>
+        <>
+          <div className="flex flex-col gap-5">
+            <span className="p-5 rounded bg-slate-500 self-center">Studio</span>
+            {interactionTypes.map((interactionType, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setSelectedInteractionType(interactionType);
+                  setSelectedQuestionType("studio");
+                  setInteractionData(initialData(interactionType));
+                }}
+                style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
+              >
+                {interactionType}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-col gap-5">
+            <span className="p-5 rounded bg-slate-500 self-center">Exam</span>
+            {interactionTypes.map((interactionType, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setSelectedInteractionType(interactionType);
+                  setSelectedQuestionType("exam");
+                  setInteractionData(initialData(interactionType));
+                }}
+                style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
+              >
+                {interactionType}
+              </button>
+            ))}
+          </div>
+        </>
       )}
 
-      {selectedInteractionType && interactionData && (
+      {selectedInteractionType && (
         <>
-          <StudioInteraction
-            value={interactionData}
-            onChange={setInteractionData}
-          />
+          {interactionData && selectedQuestionType === "studio" ? (
+            <StudioInteraction
+              value={interactionData}
+              onChange={setInteractionData}
+            />
+          ) : selectedQuestionType === "exam" ? (
+            <ExamInteraction value="TrueOrFalse" />
+          ) : null}
+
           <div className="flex gap-4 justify-end">
             <button
               style={{ background: "#ECFEFD", padding: 10, borderRadius: 5 }}

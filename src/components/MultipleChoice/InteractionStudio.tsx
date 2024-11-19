@@ -6,7 +6,6 @@ const makeId = () => (++id).toString();
 const MultipleChoiceInteractionStudio: StudioInteractionComponent<
   "MultipleChoice"
 > = ({ value, onChange }) => {
-  console.log(value);
   return (
     <div className="flex flex-col gap-5">
       {value.choices.map((choice, i) => (
