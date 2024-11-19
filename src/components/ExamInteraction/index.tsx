@@ -14,18 +14,20 @@ export type ExamInteractionComponent<Type extends InteractionType> = FC<
   InteractionComponentProps<Type>
 >;
 
+const interactionComponents = {
+  FreeResponse: FreeResponseInteractionExam,
+  MultipleChoice: MultipleChoiceInteractionExam,
+  TrueOrFalse: TrueOrFalseInteractionExam,
+  Matching: MatchingInteractionExam,
+};
+
 export default function ExamInteraction<Type extends InteractionType>({
   value,
 }: InteractionComponentProps<Type>) {
-  const interactionComponents = {
-    FreeResponse: FreeResponseInteractionExam,
-    MultipleChoice: MultipleChoiceInteractionExam,
-    TrueOrFalse: TrueOrFalseInteractionExam,
-    Matching: MatchingInteractionExam,
-  };
   const ExamComponents = interactionComponents[
     value
   ] as ExamInteractionComponent<Type>;
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex gap-5 items-center">
