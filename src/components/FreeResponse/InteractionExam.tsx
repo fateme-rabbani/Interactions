@@ -1,11 +1,21 @@
 import { ExamInteractionComponent } from "../ExamInteraction";
 
-const FreeResponseInteractionExam: ExamInteractionComponent<
-  "FreeResponse"
-> = () => (
+const FreeResponseInteractionExam: ExamInteractionComponent<"FreeResponse"> = ({
+  value,
+  onChange,
+}) => (
   <div className="flex flex-col gap-2">
     <label htmlFor="answer">answer</label>
-    <input type="text" id="answer" onChange={(e) => e.target.value} value={1} />
+    <input
+      type="text"
+      id="answer"
+      onChange={(e) =>
+        onChange({
+          correctAnswer: e.target.value,
+        })
+      }
+      value={value.correctAnswer}
+    />
   </div>
 );
 export default FreeResponseInteractionExam;

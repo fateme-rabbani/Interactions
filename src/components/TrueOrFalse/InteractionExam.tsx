@@ -1,10 +1,13 @@
 import { ExamInteractionComponent } from "../ExamInteraction";
 
-const TrueOrFalseInteractionExam: ExamInteractionComponent<
-  "TrueOrFalse"
-> = () => {
+const TrueOrFalseInteractionExam: ExamInteractionComponent<"TrueOrFalse"> = ({
+  value,
+  onChange,
+}) => {
   const handleChange = (isTrue: boolean) => {
-    return isTrue;
+    onChange({
+      isTrue,
+    });
   };
 
   return (
@@ -16,8 +19,7 @@ const TrueOrFalseInteractionExam: ExamInteractionComponent<
             type="radio"
             id="true"
             name="answer"
-            value="true"
-            checked={true}
+            checked={value.isTrue === true}
             onChange={() => handleChange(true)}
           />
           <label htmlFor="true">true</label>
@@ -28,7 +30,7 @@ const TrueOrFalseInteractionExam: ExamInteractionComponent<
             id="false"
             name="answer"
             value="false"
-            checked={false}
+            checked={value.isTrue === false}
             onChange={() => handleChange(false)}
           />
           <label htmlFor="false">false</label>

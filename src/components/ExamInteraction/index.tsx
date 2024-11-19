@@ -1,13 +1,19 @@
 import { FC } from "react";
-import { InteractionType } from "../../App";
+import { Interaction, InteractionInfo, InteractionType } from "../../App";
 
 import FreeResponseInteractionExam from "../FreeResponse/InteractionExam";
 import MatchingInteractionExam from "../Maching/InteractionExam";
 import MultipleChoiceInteractionExam from "../MultipleChoice/InteractionExam";
 import TrueOrFalseInteractionExam from "../TrueOrFalse/InteractionExam";
 
+export interface ExamInteractionProps<Type extends InteractionType> {
+  value: Interaction<Type>;
+  onChange(value: Interaction<Type>): void;
+}
+
 export interface InteractionComponentProps<Type extends InteractionType> {
-  value: Type;
+  value: InteractionInfo<Type>;
+  onChange(value: InteractionInfo<Type>): void;
 }
 
 export type ExamInteractionComponent<Type extends InteractionType> = FC<
@@ -23,9 +29,10 @@ const interactionComponents = {
 
 export default function ExamInteraction<Type extends InteractionType>({
   value,
-}: InteractionComponentProps<Type>) {
+  onChange,
+}: ExamInteractionProps<Type>) {
   const ExamComponents = interactionComponents[
-    value
+    value.type
   ] as ExamInteractionComponent<Type>;
 
   return (
@@ -43,12 +50,15 @@ export default function ExamInteraction<Type extends InteractionType>({
       <button className="bg-[#16AE9E] rounded-xl px-2 self-end">
         subQuestion
       </button>
-      <div>parent Question</div>
+      <div>{value.question}</div>
       <div>
         Lorem سلام ipsum dolor sit amet, consectetur adipiscing elit, sed do
         eiusmod tempor?
       </div>
-      <ExamComponents value={value} />
+      <ExamComponents
+        value={value.interactionInfo}
+        onChange={(interactionInfo) => onChange({ ...value, interactionInfo })}
+      />
       <div className="border w-fit border-[#16AE9E] px-2 rounded-xl text-[#16AE9E]">
         Score 1.5
       </div>

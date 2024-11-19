@@ -18,7 +18,7 @@ interface FreeResponseInteractionInfo {
 }
 
 interface MultipleChoiceInteractionInfo {
-  choices: { id: string; content: string; isCorrect: boolean }[];
+  choices: { id: string; content: string; isCorrect: boolean | null }[];
 }
 
 interface MachingInteractionInfo {
@@ -26,7 +26,7 @@ interface MachingInteractionInfo {
 }
 
 interface TrueOrFalseInteractionInfo {
-  isTrue: boolean;
+  isTrue: boolean | null;
 }
 
 export type InteractionInfo<Type extends InteractionType> =
@@ -43,8 +43,8 @@ export type InteractionInfo<Type extends InteractionType> =
 export interface Interaction<Type extends InteractionType> {
   type: Type;
   question: string;
-  solution: string;
-  difficulty: string;
+  solution?: string;
+  difficulty?: string;
   interactionInfo: InteractionInfo<Type>;
 }
 
@@ -68,7 +68,7 @@ export default function App() {
                 onClick={() => {
                   setSelectedInteractionType(interactionType);
                   setSelectedQuestionType("studio");
-                  setInteractionData(initialData(interactionType));
+                  setInteractionData(initialStudioData(interactionType));
                 }}
                 style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
               >
@@ -84,7 +84,7 @@ export default function App() {
                 onClick={() => {
                   setSelectedInteractionType(interactionType);
                   setSelectedQuestionType("exam");
-                  setInteractionData(initialData(interactionType));
+                  setInteractionData(initialExamData(interactionType));
                 }}
                 style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
               >
@@ -102,8 +102,11 @@ export default function App() {
               value={interactionData}
               onChange={setInteractionData}
             />
-          ) : selectedQuestionType === "exam" ? (
-            <ExamInteraction value="TrueOrFalse" />
+          ) : interactionData && selectedQuestionType === "exam" ? (
+            <ExamInteraction
+              value={interactionData}
+              onChange={setInteractionData}
+            />
           ) : null}
 
           <div className="flex gap-4 justify-end">
@@ -126,7 +129,9 @@ export default function App() {
   );
 }
 
-const initialData = (type: InteractionType): Interaction<InteractionType> => {
+const initialStudioData = (
+  type: InteractionType
+): Interaction<InteractionType> => {
   switch (type) {
     case "FreeResponse":
       return {
@@ -167,6 +172,59 @@ const initialData = (type: InteractionType): Interaction<InteractionType> => {
           maching: [
             { id: "1", firstVal: "Item 1", secondVal: "Match 1" },
             { id: "2", firstVal: "Item 2", secondVal: "Match 2" },
+          ],
+        },
+      };
+    default:
+      throw new Error("Unknown interaction type");
+  }
+};
+
+const initialExamData = (
+  type: InteractionType
+): Interaction<InteractionType> => {
+  switch (type) {
+    case "FreeResponse":
+      return {
+        type: "FreeResponse",
+        question: "parent Question",
+        interactionInfo: { correctAnswer: "" },
+      };
+    case "MultipleChoice":
+      return {
+        type: "MultipleChoice",
+        question: "parent Question",
+        interactionInfo: {
+          choices: [
+            { id: "1", content: "Choice 1", isCorrect: null },
+            { id: "2", content: "Choice 2", isCorrect: null },
+            { id: "3", content: "Choice 3", isCorrect: null },
+            { id: "4", content: "Choice 4", isCorrect: null },
+          ],
+        },
+      };
+    case "TrueOrFalse":
+      return {
+        type: "TrueOrFalse",
+        question: "parent Question",
+        interactionInfo: { isTrue: null },
+      };
+    case "Matching":
+      return {
+        type: "Matching",
+        question: "parent Question",
+        interactionInfo: {
+          maching: [
+            {
+              id: "1",
+              firstVal: "Item 1",
+              secondVal: "",
+            },
+            {
+              id: "2",
+              firstVal: "Item 2",
+              secondVal: "",
+            },
           ],
         },
       };

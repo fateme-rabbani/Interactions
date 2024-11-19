@@ -15,7 +15,7 @@ const MultipleChoiceInteractionStudio: StudioInteractionComponent<
             <input
               type="checkbox"
               id={`enable-${choice.id}`}
-              checked={choice.isCorrect}
+              checked={!!choice.isCorrect}
               onChange={(e) => {
                 onChange({
                   ...value,
