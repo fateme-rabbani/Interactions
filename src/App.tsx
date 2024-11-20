@@ -2,7 +2,9 @@ import { useState } from "react";
 import StudioInteraction from "./components/StudioInteraction";
 import ExamInteraction from "./components/ExamInteraction";
 
-export type QuestionType = "studio" | "exam";
+const questionTypes = ["studio", "exam"] as const;
+
+export type QuestionType = (typeof questionTypes)[number];
 
 const interactionTypes = [
   "FreeResponse",
@@ -60,38 +62,28 @@ export default function App() {
     <div className="flex flex-col gap-20 w-full p-10">
       {!selectedInteractionType && (
         <>
-          <div className="flex flex-col gap-5">
-            <span className="p-5 rounded bg-slate-500 self-center">Studio</span>
-            {interactionTypes.map((interactionType, i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  setSelectedInteractionType(interactionType);
-                  setSelectedQuestionType("studio");
-                  setInteractionData(initialStudioData(interactionType));
-                }}
-                style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
-              >
-                {interactionType}
-              </button>
-            ))}
-          </div>
-          <div className="flex flex-col gap-5">
-            <span className="p-5 rounded bg-slate-500 self-center">Exam</span>
-            {interactionTypes.map((interactionType, i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  setSelectedInteractionType(interactionType);
-                  setSelectedQuestionType("exam");
-                  setInteractionData(initialExamData(interactionType));
-                }}
-                style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
-              >
-                {interactionType}
-              </button>
-            ))}
-          </div>
+          {questionTypes.map((questionType) => (
+            <div className="flex flex-col gap-5">
+              <span className="p-5 rounded bg-slate-500 self-center">
+                {questionType}
+              </span>
+              {interactionTypes.map((interactionType, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setSelectedInteractionType(interactionType);
+                    setSelectedQuestionType(questionType);
+                    setInteractionData(
+                      initialInteractionData(interactionType, questionType)
+                    );
+                  }}
+                  style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
+                >
+                  {interactionType}
+                </button>
+              ))}
+            </div>
+          ))}
         </>
       )}
 
@@ -129,103 +121,71 @@ export default function App() {
   );
 }
 
-const initialStudioData = (
-  type: InteractionType
+const initialInteractionData = (
+  type: InteractionType,
+  mode: QuestionType
 ): Interaction<InteractionType> => {
-  switch (type) {
-    case "FreeResponse":
-      return {
-        type: "FreeResponse",
-        question: "Example Question for FreeResponse",
-        solution: "Sample Solution",
-        difficulty: "difficulty-0",
-        interactionInfo: { correctAnswer: "Sample Correct Answer" },
-      };
-    case "MultipleChoice":
-      return {
-        type: "MultipleChoice",
-        question: "Example Question for MultipleChoice",
-        solution: "Sample Solution",
-        difficulty: "difficulty-1",
-        interactionInfo: {
-          choices: [
-            { id: "1", content: "Choice 1", isCorrect: false },
-            { id: "2", content: "Choice 2", isCorrect: true },
-          ],
-        },
-      };
-    case "TrueOrFalse":
-      return {
-        type: "TrueOrFalse",
-        question: "Example Question for TrueOrFalse",
-        solution: "Sample Solution",
-        difficulty: "difficulty-2",
-        interactionInfo: { isTrue: true },
-      };
-    case "Matching":
-      return {
-        type: "Matching",
-        question: "Example Question for Matching",
-        solution: "Sample Solution",
-        difficulty: "difficulty-0",
-        interactionInfo: {
-          maching: [
-            { id: "1", firstVal: "Item 1", secondVal: "Match 1" },
-            { id: "2", firstVal: "Item 2", secondVal: "Match 2" },
-          ],
-        },
-      };
-    default:
-      throw new Error("Unknown interaction type");
-  }
-};
+  const isStudio = mode === "studio";
 
-const initialExamData = (
-  type: InteractionType
-): Interaction<InteractionType> => {
+  const baseData = {
+    question: isStudio ? `Example Question for ${type}` : "parent Question",
+    solution: isStudio ? "Sample Solution" : undefined,
+    difficulty: isStudio
+      ? `difficulty-${
+          type === "Matching" || type === "FreeResponse" ? "0" : "1"
+        }`
+      : undefined,
+  };
+
   switch (type) {
     case "FreeResponse":
       return {
+        ...baseData,
         type: "FreeResponse",
-        question: "parent Question",
-        interactionInfo: { correctAnswer: "" },
+        interactionInfo: {
+          correctAnswer: isStudio ? "Sample Correct Answer" : "",
+        },
       };
     case "MultipleChoice":
       return {
+        ...baseData,
         type: "MultipleChoice",
-        question: "parent Question",
         interactionInfo: {
-          choices: [
-            { id: "1", content: "Choice 1", isCorrect: null },
-            { id: "2", content: "Choice 2", isCorrect: null },
-            { id: "3", content: "Choice 3", isCorrect: null },
-            { id: "4", content: "Choice 4", isCorrect: null },
-          ],
+          choices: isStudio
+            ? [
+                { id: "1", content: "Choice 1", isCorrect: false },
+                { id: "2", content: "Choice 2", isCorrect: true },
+              ]
+            : [
+                { id: "1", content: "Choice 1", isCorrect: null },
+                { id: "2", content: "Choice 2", isCorrect: null },
+                { id: "3", content: "Choice 3", isCorrect: null },
+                { id: "4", content: "Choice 4", isCorrect: null },
+              ],
         },
       };
     case "TrueOrFalse":
       return {
+        ...baseData,
         type: "TrueOrFalse",
-        question: "parent Question",
-        interactionInfo: { isTrue: null },
+        interactionInfo: {
+          isTrue: isStudio ? true : null,
+        },
       };
     case "Matching":
       return {
+        ...baseData,
         type: "Matching",
-        question: "parent Question",
         interactionInfo: {
-          maching: [
-            {
-              id: "1",
-              firstVal: "Item 1",
-              secondVal: "",
-            },
-            {
-              id: "2",
-              firstVal: "Item 2",
-              secondVal: "",
-            },
-          ],
+          maching: isStudio
+            ? [
+                { id: "1", firstVal: "Item 1", secondVal: "Match 1" },
+                { id: "2", firstVal: "Item 2", secondVal: "Match 2" },
+              ]
+            : [
+                { id: "1", firstVal: "Item 1", secondVal: "" },
+                { id: "2", firstVal: "Item 2", secondVal: "" },
+              ],
         },
       };
     default:
