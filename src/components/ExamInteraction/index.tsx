@@ -12,8 +12,9 @@ export interface ExamInteractionProps<Type extends InteractionType> {
 }
 
 export interface InteractionComponentProps<Type extends InteractionType> {
-  value: InteractionInfo<Type>;
-  onChange(value: InteractionInfo<Type>): void;
+  interactionInfo: InteractionInfo<Type>;
+  value: ResponseData<Type>;
+  onChange(value: ResponseData<Type>): void;
 }
 
 export type ExamInteractionComponent<Type extends InteractionType> = FC<
