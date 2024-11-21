@@ -20,7 +20,7 @@ interface FreeResponseInteractionInfo {
 }
 
 interface MultipleChoiceInteractionInfo {
-  choices: { id: string; content: string; isCorrect: boolean | null }[];
+  choices: { id: string; content: string; isCorrect: boolean }[];
 }
 
 interface MachingInteractionInfo {
@@ -28,7 +28,7 @@ interface MachingInteractionInfo {
 }
 
 interface TrueOrFalseInteractionInfo {
-  isTrue: boolean | null;
+  isTrue: boolean;
 }
 
 export type InteractionInfo<Type extends InteractionType> =
