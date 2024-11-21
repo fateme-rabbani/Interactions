@@ -11,10 +11,10 @@ const FreeResponseInteractionExam: ExamInteractionComponent<"FreeResponse"> = ({
       id="answer"
       onChange={(e) =>
         onChange({
-          correctAnswer: e.target.value,
+          answer: e.target.value,
         })
       }
-      value={value.correctAnswer}
+      value={value.answer}
     />
   </div>
 );

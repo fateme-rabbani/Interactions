@@ -4,9 +4,9 @@ const TrueOrFalseInteractionExam: ExamInteractionComponent<"TrueOrFalse"> = ({
   value,
   onChange,
 }) => {
-  const handleChange = (isTrue: boolean) => {
+  const handleChange = (isTrueOrFalse: boolean) => {
     onChange({
-      isTrue,
+      isTrueOrFalse,
     });
   };
 
@@ -19,7 +19,7 @@ const TrueOrFalseInteractionExam: ExamInteractionComponent<"TrueOrFalse"> = ({
             type="radio"
             id="true"
             name="answer"
-            checked={value.isTrue === true}
+            checked={value.isTrueOrFalse === true}
             onChange={() => handleChange(true)}
           />
           <label htmlFor="true">true</label>
@@ -30,7 +30,7 @@ const TrueOrFalseInteractionExam: ExamInteractionComponent<"TrueOrFalse"> = ({
             id="false"
             name="answer"
             value="false"
-            checked={value.isTrue === false}
+            checked={value.isTrueOrFalse === false}
             onChange={() => handleChange(false)}
           />
           <label htmlFor="false">false</label>

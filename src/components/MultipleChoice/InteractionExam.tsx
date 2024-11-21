@@ -2,29 +2,26 @@ import { ExamInteractionComponent } from "../ExamInteraction";
 
 const MultipleChoiceInteractionExam: ExamInteractionComponent<
   "MultipleChoice"
-> = ({ value, onChange }) => {
+> = ({ interactionInfo, value, onChange }) => {
   return (
     <div className="flex flex-col gap-5">
-      {value.choices.map((choice, i) => (
+      {interactionInfo.choices.map((choice, i) => (
         <div key={i}>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
             <span>{i + 1}</span>
             <input
               type="checkbox"
-              id={`enable-${choice.id}`}
-              checked={!!choice.isCorrect}
+              id={`choice-${choice.id}`}
               onChange={(e) => {
                 onChange({
                   ...value,
-                  choices: value.choices.map((item) =>
-                    item.id === choice.id
-                      ? { ...item, isCorrect: e.target.checked }
-                      : { ...item, isCorrect: false }
-                  ),
+                  selectedChoices: e.target.checked
+                    ? [...value.selectedChoices, choice.id]
+                    : value.selectedChoices.filter((id) => id !== choice.id),
                 });
               }}
             />
-            <span>{choice.content}</span>
+            <label htmlFor={`choice-${choice.id}`}>{choice.content}</label>
           </div>
         </div>
       ))}

@@ -1,33 +1,33 @@
 import { ExamInteractionComponent } from "../ExamInteraction";
 
 const MatchingInteractionExam: ExamInteractionComponent<"Matching"> = ({
+  interactionInfo,
   value,
   onChange,
 }) => {
   const optionsList = ["match 1", "match 2", "match 3"];
+
   return (
     <div className="flex flex-col gap-3">
       <span>Match the following Countries with their Capitals:</span>
-      {value.maching.map((item, i) => (
-        <div key={i} className="flex gap-5">
+      {interactionInfo.maching.map((item, i) => (
+        <div key={i} className="flex gap-5 items-center">
           <span>{item.firstVal}</span>
           <select
-            value={item.secondVal}
             onChange={(e) => {
-              console.log(e.target.value);
+              const selectedValue = e.target.value;
               onChange({
                 ...value,
-                maching: value.maching.map((mach) =>
-                  mach.id === item.id
-                    ? { ...mach, secondVal: e.target.value }
-                    : mach
-                ),
+                selectedMatchMap: {
+                  ...value.selectedMatchMap,
+                  [item.id]: selectedValue,
+                },
               });
             }}
           >
-            {optionsList.map((val, index) => (
-              <option key={index} value={val}>
-                {val}
+            {optionsList.map((optionItem, i) => (
+              <option key={i} value={optionItem}>
+                {optionItem}
               </option>
             ))}
           </select>

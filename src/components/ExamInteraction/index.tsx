@@ -1,5 +1,10 @@
 import { FC } from "react";
-import { Interaction, InteractionInfo, InteractionType } from "../../App";
+import {
+  Interaction,
+  InteractionInfo,
+  InteractionType,
+  ResponseData,
+} from "../../App";
 
 import FreeResponseInteractionExam from "../FreeResponse/InteractionExam";
 import MatchingInteractionExam from "../Maching/InteractionExam";
@@ -57,8 +62,14 @@ export default function ExamInteraction<Type extends InteractionType>({
         eiusmod tempor?
       </div>
       <ExamComponents
-        value={value.interactionInfo}
-        onChange={(interactionInfo) => onChange({ ...value, interactionInfo })}
+        interactionInfo={value.interactionInfo}
+        value={value.responseData}
+        onChange={(responseData) =>
+          onChange({
+            ...value,
+            responseData,
+          })
+        }
       />
       <div className="border w-fit border-[#16AE9E] px-2 rounded-xl text-[#16AE9E]">
         Score 1.5

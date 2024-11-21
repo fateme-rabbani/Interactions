@@ -42,12 +42,39 @@ export type InteractionInfo<Type extends InteractionType> =
     ? TrueOrFalseInteractionInfo
     : never;
 
+interface FreeResponseDataInfo {
+  answer: string;
+}
+
+interface MultipleChoiceDataInfo {
+  selectedChoices: string[];
+}
+
+interface MachingDataInfo {
+  selectedMatchMap: Record<string, string>;
+}
+
+interface TrueOrFalseDataInfo {
+  isTrueOrFalse: boolean | null;
+}
+export type ResponseData<Type extends InteractionType> =
+  Type extends "FreeResponse"
+    ? FreeResponseDataInfo
+    : Type extends "MultipleChoice"
+    ? MultipleChoiceDataInfo
+    : Type extends "Matching"
+    ? MachingDataInfo
+    : Type extends "TrueOrFalse"
+    ? TrueOrFalseDataInfo
+    : never;
+
 export interface Interaction<Type extends InteractionType> {
   type: Type;
   question: string;
   solution?: string;
   difficulty?: string;
   interactionInfo: InteractionInfo<Type>;
+  responseData: ResponseData<Type>;
 }
 
 export default function App() {
@@ -124,17 +151,17 @@ export default function App() {
 const initialInteractionData = (
   type: InteractionType,
   mode: QuestionType
-): Interaction<InteractionType> => {
+): Interaction<InteractionType> & {
+  responseData: ResponseData<InteractionType>;
+} => {
   const isStudio = mode === "studio";
 
   const baseData = {
-    question: isStudio ? `Example Question for ${type}` : "parent Question",
-    solution: isStudio ? "Sample Solution" : undefined,
-    difficulty: isStudio
-      ? `difficulty-${
-          type === "Matching" || type === "FreeResponse" ? "0" : "1"
-        }`
-      : undefined,
+    question: isStudio ? `Example Question for ${type}` : "Parent Question",
+    solution: "Sample Solution",
+    difficulty: `difficulty-${
+      type === "Matching" || type === "FreeResponse" ? "0" : "1"
+    }`,
   };
 
   switch (type) {
@@ -143,7 +170,10 @@ const initialInteractionData = (
         ...baseData,
         type: "FreeResponse",
         interactionInfo: {
-          correctAnswer: isStudio ? "Sample Correct Answer" : "",
+          correctAnswer: "Sample Correct Answer",
+        },
+        responseData: {
+          answer: "",
         },
       };
     case "MultipleChoice":
@@ -151,17 +181,13 @@ const initialInteractionData = (
         ...baseData,
         type: "MultipleChoice",
         interactionInfo: {
-          choices: isStudio
-            ? [
-                { id: "1", content: "Choice 1", isCorrect: false },
-                { id: "2", content: "Choice 2", isCorrect: true },
-              ]
-            : [
-                { id: "1", content: "Choice 1", isCorrect: null },
-                { id: "2", content: "Choice 2", isCorrect: null },
-                { id: "3", content: "Choice 3", isCorrect: null },
-                { id: "4", content: "Choice 4", isCorrect: null },
-              ],
+          choices: [
+            { id: "1", content: "Choice 1", isCorrect: false },
+            { id: "2", content: "Choice 2", isCorrect: true },
+          ],
+        },
+        responseData: {
+          selectedChoices: [],
         },
       };
     case "TrueOrFalse":
@@ -169,7 +195,10 @@ const initialInteractionData = (
         ...baseData,
         type: "TrueOrFalse",
         interactionInfo: {
-          isTrue: isStudio ? true : null,
+          isTrue: true,
+        },
+        responseData: {
+          isTrueOrFalse: null,
         },
       };
     case "Matching":
@@ -177,15 +206,13 @@ const initialInteractionData = (
         ...baseData,
         type: "Matching",
         interactionInfo: {
-          maching: isStudio
-            ? [
-                { id: "1", firstVal: "Item 1", secondVal: "Match 1" },
-                { id: "2", firstVal: "Item 2", secondVal: "Match 2" },
-              ]
-            : [
-                { id: "1", firstVal: "Item 1", secondVal: "" },
-                { id: "2", firstVal: "Item 2", secondVal: "" },
-              ],
+          maching: [
+            { id: "1", firstVal: "Item 1", secondVal: "Match 1" },
+            { id: "2", firstVal: "Item 2", secondVal: "Match 2" },
+          ],
+        },
+        responseData: {
+          selectedMatchMap: {},
         },
       };
     default:
