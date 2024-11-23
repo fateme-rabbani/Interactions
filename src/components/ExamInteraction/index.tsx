@@ -64,12 +64,7 @@ export default function ExamInteraction<Type extends InteractionType>({
       <ExamComponents
         interactionInfo={value.interactionInfo}
         value={value.responseData}
-        onChange={(responseData) =>
-          onChange({
-            ...value,
-            responseData,
-          })
-        }
+        onChange={(responseData) => onChange({ ...value, responseData })}
       />
       <div className="border w-fit border-[#16AE9E] px-2 rounded-xl text-[#16AE9E]">
         Score 1.5

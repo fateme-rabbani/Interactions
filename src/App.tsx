@@ -31,42 +31,68 @@ interface TrueOrFalseInteractionInfo {
   isTrue: boolean;
 }
 
-export type InteractionInfo<Type extends InteractionType> =
-  Type extends "FreeResponse"
-    ? FreeResponseInteractionInfo
-    : Type extends "MultipleChoice"
-    ? MultipleChoiceInteractionInfo
-    : Type extends "Matching"
-    ? MachingInteractionInfo
-    : Type extends "TrueOrFalse"
-    ? TrueOrFalseInteractionInfo
-    : never;
-
-interface FreeResponseDataInfo {
+interface FreeResponseResponseData {
   answer: string;
 }
 
-interface MultipleChoiceDataInfo {
+interface MultipleChoiceResponseData {
   selectedChoices: string[];
 }
 
-interface MachingDataInfo {
+interface MachingResponseData {
   selectedMatchMap: Record<string, string>;
 }
 
-interface TrueOrFalseDataInfo {
+interface TrueOrFalseResponseData {
   isTrueOrFalse: boolean | null;
 }
+
+// export type InteractionInfo<Type extends InteractionType> =
+//   Type extends "FreeResponse"
+//     ? FreeResponseInteractionInfo
+//     : Type extends "MultipleChoice"
+//     ? MultipleChoiceInteractionInfo
+//     : Type extends "Matching"
+//     ? MachingInteractionInfo
+//     : Type extends "TrueOrFalse"
+//     ? TrueOrFalseInteractionInfo
+//     : never;
+
+// export type ResponseData<Type extends InteractionType> =
+//   Type extends "FreeResponse"
+//     ? FreeResponseResponseData
+//     : Type extends "MultipleChoice"
+//     ? MultipleChoiceResponseData
+//     : Type extends "Matching"
+//     ? MachingResponseData
+//     : Type extends "TrueOrFalse"
+//     ? TrueOrFalseResponseData
+//     : never;
+
+type InteractionTypeMap = {
+  FreeResponse: {
+    interactionInfo: FreeResponseInteractionInfo;
+    responseData: FreeResponseResponseData;
+  };
+  MultipleChoice: {
+    interactionInfo: MultipleChoiceInteractionInfo;
+    responseData: MultipleChoiceResponseData;
+  };
+  Matching: {
+    interactionInfo: MachingInteractionInfo;
+    responseData: MachingResponseData;
+  };
+  TrueOrFalse: {
+    interactionInfo: TrueOrFalseInteractionInfo;
+    responseData: TrueOrFalseResponseData;
+  };
+};
+
+export type InteractionInfo<Type extends InteractionType> =
+  InteractionTypeMap[Type]["interactionInfo"];
+
 export type ResponseData<Type extends InteractionType> =
-  Type extends "FreeResponse"
-    ? FreeResponseDataInfo
-    : Type extends "MultipleChoice"
-    ? MultipleChoiceDataInfo
-    : Type extends "Matching"
-    ? MachingDataInfo
-    : Type extends "TrueOrFalse"
-    ? TrueOrFalseDataInfo
-    : never;
+  InteractionTypeMap[Type]["responseData"];
 
 export interface Interaction<Type extends InteractionType> {
   type: Type;
