@@ -47,28 +47,6 @@ interface TrueOrFalseResponseData {
   isTrueOrFalse: boolean | null;
 }
 
-// export type InteractionInfo<Type extends InteractionType> =
-//   Type extends "FreeResponse"
-//     ? FreeResponseInteractionInfo
-//     : Type extends "MultipleChoice"
-//     ? MultipleChoiceInteractionInfo
-//     : Type extends "Matching"
-//     ? MachingInteractionInfo
-//     : Type extends "TrueOrFalse"
-//     ? TrueOrFalseInteractionInfo
-//     : never;
-
-// export type ResponseData<Type extends InteractionType> =
-//   Type extends "FreeResponse"
-//     ? FreeResponseResponseData
-//     : Type extends "MultipleChoice"
-//     ? MultipleChoiceResponseData
-//     : Type extends "Matching"
-//     ? MachingResponseData
-//     : Type extends "TrueOrFalse"
-//     ? TrueOrFalseResponseData
-//     : never;
-
 type InteractionTypeMap = {
   FreeResponse: {
     interactionInfo: FreeResponseInteractionInfo;
