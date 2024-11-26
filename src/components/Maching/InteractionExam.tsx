@@ -1,6 +1,6 @@
 import { ExamInteractionComponent } from "../ExamInteraction";
 
-const MatchingInteractionExam: ExamInteractionComponent<"Matching"> = ({
+const MatchingInteractionExam: ExamInteractionComponent<"matching"> = ({
   interactionInfo,
   value,
   onChange,

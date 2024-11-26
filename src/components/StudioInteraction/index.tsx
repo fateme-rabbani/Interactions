@@ -20,10 +20,10 @@ export type StudioInteractionComponent<Type extends InteractionType> = FC<
 >;
 
 const interactionComponents = {
-  FreeResponse: FreeResponseInteractionStudio,
-  MultipleChoice: MultipleChoiceInteractionStudio,
-  TrueOrFalse: TrueOrFalseInteractionStudio,
-  Matching: MatchingInteractionStudio,
+  freeResponse: FreeResponseInteractionStudio,
+  multipleChoice: MultipleChoiceInteractionStudio,
+  trueOrFalse: TrueOrFalseInteractionStudio,
+  matching: MatchingInteractionStudio,
 };
 
 export default function StudioInteraction<Type extends InteractionType>({

@@ -27,10 +27,10 @@ export type ExamInteractionComponent<Type extends InteractionType> = FC<
 >;
 
 const interactionComponents = {
-  FreeResponse: FreeResponseInteractionExam,
-  MultipleChoice: MultipleChoiceInteractionExam,
-  TrueOrFalse: TrueOrFalseInteractionExam,
-  Matching: MatchingInteractionExam,
+  freeResponse: FreeResponseInteractionExam,
+  multipleChoice: MultipleChoiceInteractionExam,
+  trueOrFalse: TrueOrFalseInteractionExam,
+  matching: MatchingInteractionExam,
 };
 
 export default function ExamInteraction<Type extends InteractionType>({

@@ -4,7 +4,7 @@ let id = 0;
 const makeId = () => (++id).toString();
 
 const MultipleChoiceInteractionStudio: StudioInteractionComponent<
-  "MultipleChoice"
+  "multipleChoice"
 > = ({ value, onChange }) => {
   return (
     <div className="flex flex-col gap-5">

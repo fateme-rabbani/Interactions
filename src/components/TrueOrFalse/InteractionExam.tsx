@@ -1,6 +1,6 @@
 import { ExamInteractionComponent } from "../ExamInteraction";
 
-const TrueOrFalseInteractionExam: ExamInteractionComponent<"TrueOrFalse"> = ({
+const TrueOrFalseInteractionExam: ExamInteractionComponent<"trueOrFalse"> = ({
   value,
   onChange,
 }) => {

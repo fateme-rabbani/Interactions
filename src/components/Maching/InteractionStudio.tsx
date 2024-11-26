@@ -3,7 +3,7 @@ import { StudioInteractionComponent } from "../StudioInteraction";
 let id = 0;
 const makeId = () => (++id).toString();
 
-const MatchingInteractionStudio: StudioInteractionComponent<"Matching"> = ({
+const MatchingInteractionStudio: StudioInteractionComponent<"matching"> = ({
   value,
   onChange,
 }) => {

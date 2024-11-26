@@ -1,7 +1,7 @@
 import { ExamInteractionComponent } from "../ExamInteraction";
 
 const MultipleChoiceInteractionExam: ExamInteractionComponent<
-  "MultipleChoice"
+  "multipleChoice"
 > = ({ interactionInfo, value, onChange }) => {
   return (
     <div className="flex flex-col gap-5">

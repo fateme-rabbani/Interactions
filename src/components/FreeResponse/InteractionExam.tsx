@@ -1,6 +1,6 @@
 import { ExamInteractionComponent } from "../ExamInteraction";
 
-const FreeResponseInteractionExam: ExamInteractionComponent<"FreeResponse"> = ({
+const FreeResponseInteractionExam: ExamInteractionComponent<"freeResponse"> = ({
   value,
   onChange,
 }) => (

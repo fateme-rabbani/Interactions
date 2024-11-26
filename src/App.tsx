@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, FC } from "react";
 import StudioInteraction from "./components/StudioInteraction";
 import ExamInteraction from "./components/ExamInteraction";
 
@@ -6,24 +7,11 @@ const questionTypes = ["studio", "exam"] as const;
 
 export type QuestionType = (typeof questionTypes)[number];
 
-const interactionTypes = [
-  "FreeResponse",
-  "MultipleChoice",
-  "TrueOrFalse",
-  "Matching",
-] as const;
-
-export type InteractionType = (typeof interactionTypes)[number];
-
-interface FreeResponseInteractionInfo {
-  correctAnswer: string;
-}
-
 interface MultipleChoiceInteractionInfo {
   choices: { id: string; content: string; isCorrect: boolean }[];
 }
 
-interface MachingInteractionInfo {
+interface MatchingInteractionInfo {
   maching: { id: string; firstVal: string; secondVal: string }[];
 }
 
@@ -31,46 +19,114 @@ interface TrueOrFalseInteractionInfo {
   isTrue: boolean;
 }
 
-interface FreeResponseResponseData {
+export interface FreeResponseInteractionInfo {
+  correctAnswer: string;
+}
+
+export interface FreeResponseResponseData {
   answer: string;
 }
 
-interface MultipleChoiceResponseData {
+export interface MultipleChoiceResponseData {
   selectedChoices: string[];
 }
 
-interface MachingResponseData {
+export interface MatchingResponseData {
   selectedMatchMap: Record<string, string>;
 }
 
-interface TrueOrFalseResponseData {
+export interface TrueOrFalseResponseData {
   isTrueOrFalse: boolean | null;
 }
 
-type InteractionTypeMap = {
-  FreeResponse: {
-    interactionInfo: FreeResponseInteractionInfo;
-    responseData: FreeResponseResponseData;
-  };
-  MultipleChoice: {
-    interactionInfo: MultipleChoiceInteractionInfo;
-    responseData: MultipleChoiceResponseData;
-  };
-  Matching: {
-    interactionInfo: MachingInteractionInfo;
-    responseData: MachingResponseData;
-  };
-  TrueOrFalse: {
-    interactionInfo: TrueOrFalseInteractionInfo;
-    responseData: TrueOrFalseResponseData;
-  };
-};
+export interface StudioInteractionComponentProps<
+  interactionInfo extends object
+> {
+  value: interactionInfo;
+  onChange(value: interactionInfo): void;
+}
+
+export type StudioInteractionComponent<interactionInfo extends object> = FC<
+  StudioInteractionComponentProps<interactionInfo>
+>;
+
+export interface ExamInteractionComponentProps<
+  interactionInfo extends object,
+  responseData extends object
+> {
+  interactionInfo: interactionInfo;
+  value: responseData;
+  onChange(value: responseData): void;
+}
+
+export type ExamInteractionComponent<
+  interactionInfo extends object,
+  responseData extends object
+> = FC<ExamInteractionComponentProps<interactionInfo, responseData>>;
+
+export interface InteractionMeta<
+  interactionInfo extends object,
+  responseData extends object
+> {
+  label: string;
+  studioComponent: StudioInteractionComponent<interactionInfo>;
+  examComponent: ExamInteractionComponent<interactionInfo, responseData>;
+}
+
+const freeResponseMeta: InteractionMeta<
+  FreeResponseInteractionInfo,
+  FreeResponseResponseData
+> = {
+  label: "freeResponse",
+  studioComponent: () => <div>Studio Component</div>,
+  examComponent: () => <div>Exam Component</div>,
+} as const;
+
+const multipleChoiceMeta: InteractionMeta<
+  MultipleChoiceInteractionInfo,
+  MultipleChoiceResponseData
+> = {
+  label: "multipleChoice",
+  studioComponent: () => <div>Studio Component</div>,
+  examComponent: () => <div>Exam Component</div>,
+} as const;
+
+const matchingMeta: InteractionMeta<
+  MatchingInteractionInfo,
+  MatchingResponseData
+> = {
+  label: "matching",
+  studioComponent: () => <div>Studio Component</div>,
+  examComponent: () => <div>Exam Component</div>,
+} as const;
+
+const trueOrFalseMeta: InteractionMeta<
+  TrueOrFalseInteractionInfo,
+  TrueOrFalseResponseData
+> = {
+  label: "trueOrFalse",
+  studioComponent: () => <div>Studio Component</div>,
+  examComponent: () => <div>Exam Component</div>,
+} as const;
+
+export const InteractionsMetas = {
+  freeResponse: freeResponseMeta,
+  multipleChoice: multipleChoiceMeta,
+  matching: matchingMeta,
+  trueOrFalse: trueOrFalseMeta,
+} as const satisfies Record<string, InteractionMeta<any, any>>;
+
+export type InteractionType = keyof typeof InteractionsMetas;
 
 export type InteractionInfo<Type extends InteractionType> =
-  InteractionTypeMap[Type]["interactionInfo"];
+  (typeof InteractionsMetas)[Type] extends InteractionMeta<infer II, any>
+    ? II
+    : unknown;
 
 export type ResponseData<Type extends InteractionType> =
-  InteractionTypeMap[Type]["responseData"];
+  (typeof InteractionsMetas)[Type] extends InteractionMeta<any, infer RD>
+    ? RD
+    : unknown;
 
 export interface Interaction<Type extends InteractionType> {
   type: Type;
@@ -98,7 +154,11 @@ export default function App() {
               <span className="p-5 rounded bg-slate-500 self-center">
                 {questionType}
               </span>
-              {interactionTypes.map((interactionType, i) => (
+              {(
+                Object.keys(InteractionsMetas) as Array<
+                  keyof typeof InteractionsMetas
+                >
+              ).map((interactionType, i) => (
                 <button
                   key={i}
                   onClick={() => {
@@ -164,15 +224,15 @@ const initialInteractionData = (
     question: isStudio ? `Example Question for ${type}` : "Parent Question",
     solution: "Sample Solution",
     difficulty: `difficulty-${
-      type === "Matching" || type === "FreeResponse" ? "0" : "1"
+      type === "matching" || type === "freeResponse" ? "0" : "1"
     }`,
   };
 
   switch (type) {
-    case "FreeResponse":
+    case "freeResponse":
       return {
         ...baseData,
-        type: "FreeResponse",
+        type: "freeResponse",
         interactionInfo: {
           correctAnswer: "Sample Correct Answer",
         },
@@ -180,10 +240,10 @@ const initialInteractionData = (
           answer: "",
         },
       };
-    case "MultipleChoice":
+    case "multipleChoice":
       return {
         ...baseData,
-        type: "MultipleChoice",
+        type: "multipleChoice",
         interactionInfo: {
           choices: [
             { id: "1", content: "Choice 1", isCorrect: false },
@@ -194,10 +254,10 @@ const initialInteractionData = (
           selectedChoices: [],
         },
       };
-    case "TrueOrFalse":
+    case "trueOrFalse":
       return {
         ...baseData,
-        type: "TrueOrFalse",
+        type: "trueOrFalse",
         interactionInfo: {
           isTrue: true,
         },
@@ -205,10 +265,10 @@ const initialInteractionData = (
           isTrueOrFalse: null,
         },
       };
-    case "Matching":
+    case "matching":
       return {
         ...baseData,
-        type: "Matching",
+        type: "matching",
         interactionInfo: {
           maching: [
             { id: "1", firstVal: "Item 1", secondVal: "Match 1" },

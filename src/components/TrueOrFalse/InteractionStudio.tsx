@@ -1,7 +1,7 @@
 import { StudioInteractionComponent } from "../StudioInteraction";
 
 const TrueOrFalseInteractionStudio: StudioInteractionComponent<
-  "TrueOrFalse"
+  "trueOrFalse"
 > = ({ value, onChange }) => {
   const handleChange = (isTrue: boolean) => {
     onChange({
