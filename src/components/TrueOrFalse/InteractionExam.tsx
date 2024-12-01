@@ -1,9 +1,10 @@
-import { ExamInteractionComponent } from "../ExamInteraction";
+import { ExamInteractionComponent } from "../../App";
+import { TrueOrFalseInteractionInfo, TrueOrFalseResponseData } from "./type";
 
-const TrueOrFalseInteractionExam: ExamInteractionComponent<"trueOrFalse"> = ({
-  value,
-  onChange,
-}) => {
+const TrueOrFalseInteractionExam: ExamInteractionComponent<
+  TrueOrFalseInteractionInfo,
+  TrueOrFalseResponseData
+> = ({ value, onChange }) => {
   const handleChange = (isTrueOrFalse: boolean) => {
     onChange({
       isTrueOrFalse,

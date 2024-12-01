@@ -1,7 +1,8 @@
-import { StudioInteractionComponent } from "../StudioInteraction";
+import { StudioInteractionComponent } from "../../App";
+import { FreeResponseInteractionInfo } from "./type";
 
 const FreeResponseInteractionStudio: StudioInteractionComponent<
-  "freeResponse"
+  FreeResponseInteractionInfo
 > = ({ value, onChange }) => (
   <div className="flex flex-col gap-2">
     <label htmlFor="correctAnswer">correctAnswer</label>

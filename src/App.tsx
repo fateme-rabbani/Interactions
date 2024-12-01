@@ -3,34 +3,13 @@ import { useState, FC } from "react";
 import StudioInteraction from "./components/StudioInteraction";
 import ExamInteraction from "./components/ExamInteraction";
 import freeResponseInteractionMeta from "./components/FreeResponse";
+import multipleChoiceInteractionMeta from "./components/MultipleChoice";
+import matchingInteractionMeta from "./components/Maching";
+import trueOrFalseInteractionMeta from "./components/TrueOrFalse";
 
 const questionTypes = ["studio", "exam"] as const;
 
 export type QuestionType = (typeof questionTypes)[number];
-
-interface MultipleChoiceInteractionInfo {
-  choices: { id: string; content: string; isCorrect: boolean }[];
-}
-
-interface MatchingInteractionInfo {
-  maching: { id: string; firstVal: string; secondVal: string }[];
-}
-
-interface TrueOrFalseInteractionInfo {
-  isTrue: boolean;
-}
-
-export interface MultipleChoiceResponseData {
-  selectedChoices: string[];
-}
-
-export interface MatchingResponseData {
-  selectedMatchMap: Record<string, string>;
-}
-
-export interface TrueOrFalseResponseData {
-  isTrueOrFalse: boolean | null;
-}
 
 export interface StudioInteractionComponentProps<
   interactionInfo extends object
@@ -66,38 +45,11 @@ export interface InteractionMeta<
   examComponent: ExamInteractionComponent<interactionInfo, responseData>;
 }
 
-const multipleChoiceMeta: InteractionMeta<
-  MultipleChoiceInteractionInfo,
-  MultipleChoiceResponseData
-> = {
-  label: "multipleChoice",
-  studioComponent: () => <div>Studio Component</div>,
-  examComponent: () => <div>Exam Component</div>,
-};
-
-const matchingMeta: InteractionMeta<
-  MatchingInteractionInfo,
-  MatchingResponseData
-> = {
-  label: "matching",
-  studioComponent: () => <div>Studio Component</div>,
-  examComponent: () => <div>Exam Component</div>,
-};
-
-const trueOrFalseMeta: InteractionMeta<
-  TrueOrFalseInteractionInfo,
-  TrueOrFalseResponseData
-> = {
-  label: "trueOrFalse",
-  studioComponent: () => <div>Studio Component</div>,
-  examComponent: () => <div>Exam Component</div>,
-};
-
 export const interactionMetas = {
   freeResponse: freeResponseInteractionMeta,
-  multipleChoice: multipleChoiceMeta,
-  matching: matchingMeta,
-  trueOrFalse: trueOrFalseMeta,
+  multipleChoice: multipleChoiceInteractionMeta,
+  matching: matchingInteractionMeta,
+  trueOrFalse: trueOrFalseInteractionMeta,
 } as const satisfies Record<string, InteractionMeta<any, any>>;
 
 export type InteractionType = keyof typeof interactionMetas;
@@ -171,6 +123,7 @@ export default function App() {
             />
           ) : interactionData && selectedQuestionType === "exam" ? (
             <ExamInteraction
+              interactionInfo={interactionData.interactionInfo}
               value={interactionData}
               onChange={setInteractionData}
             />

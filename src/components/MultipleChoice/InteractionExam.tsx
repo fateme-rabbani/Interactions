@@ -1,7 +1,12 @@
-import { ExamInteractionComponent } from "../ExamInteraction";
+import { ExamInteractionComponent } from "../../App";
+import {
+  MultipleChoiceInteractionInfo,
+  MultipleChoiceResponseData,
+} from "./type";
 
 const MultipleChoiceInteractionExam: ExamInteractionComponent<
-  "multipleChoice"
+  MultipleChoiceInteractionInfo,
+  MultipleChoiceResponseData
 > = ({ interactionInfo, value, onChange }) => {
   return (
     <div className="flex flex-col gap-5">

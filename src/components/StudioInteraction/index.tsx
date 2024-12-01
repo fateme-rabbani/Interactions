@@ -1,13 +1,19 @@
-import { FC } from "react";
-import { Interaction, InteractionInfo, InteractionType } from "../../App";
+import {
+  InteractionInfo,
+  interactionMetas,
+  InteractionType,
+  StudioInteractionComponent,
+  StudioInteractionComponentProps,
+} from "../../App";
 
 export default function StudioInteraction<Type extends InteractionType>({
   value,
   onChange,
-}: StudioInteractionProps<Type>) {
-  const StudioComponent = interactionComponents[
-    value.type
-  ] as StudioInteractionComponent<Type>;
+}: StudioInteractionComponentProps<InteractionInfo<Type> & object>) {
+  const StudioComponent = interactionMetas[value.type]
+    .studioComponent as unknown as StudioInteractionComponent<
+    InteractionInfo<Type>
+  >;
 
   return (
     <div className="flex flex-col gap-2 p-5">

@@ -1,9 +1,10 @@
-import { ExamInteractionComponent } from "../ExamInteraction";
+import { ExamInteractionComponent } from "../../App";
+import { FreeResponseInteractionInfo, FreeResponseResponseData } from "./type";
 
-const FreeResponseInteractionExam: ExamInteractionComponent<"freeResponse"> = ({
-  value,
-  onChange,
-}) => (
+const FreeResponseInteractionExam: ExamInteractionComponent<
+  FreeResponseInteractionInfo,
+  FreeResponseResponseData
+> = ({ value, onChange }) => (
   <div className="flex flex-col gap-2">
     <label htmlFor="answer">answer</label>
     <input

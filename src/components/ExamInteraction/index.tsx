@@ -1,17 +1,30 @@
 import {
   ExamInteractionComponent,
   ExamInteractionComponentProps,
+  InteractionInfo,
   interactionMetas,
   InteractionType,
+  ResponseData,
 } from "../../App";
 
 export default function ExamInteraction<Type extends InteractionType>({
+  interactionInfo,
   value,
   onChange,
-}: ExamInteractionComponentProps<Type>) {
-  const ExamComponents = interactionComponents[
-    value.type
-  ] as ExamInteractionComponent<Type>;
+}: ExamInteractionComponentProps<
+  InteractionInfo<Type> & object,
+  ResponseData<Type> & object
+>) {
+  // const ExamComponent = interactionMetas[value.type]
+  //   .examComponent as unknown as ExamInteractionComponent<
+  //   InteractionInfo<Type>,
+  //   ResponseData<Type>
+  // >;
+  const ExamComponent = interactionMetas[value.type]
+    .examComponent as ExamInteractionComponent<
+    InteractionInfo<Type>,
+    ResponseData<Type>
+  >;
 
   return (
     <div className="flex flex-col gap-5">
@@ -33,8 +46,8 @@ export default function ExamInteraction<Type extends InteractionType>({
         Lorem سلام ipsum dolor sit amet, consectetur adipiscing elit, sed do
         eiusmod tempor?
       </div>
-      <ExamComponents
-        interactionInfo={value.interactionInfo}
+      <ExamComponent
+        interactionInfo={interactionInfo}
         value={value.responseData}
         onChange={(responseData) => onChange({ ...value, responseData })}
       />

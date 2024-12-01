@@ -1,7 +1,8 @@
-import { StudioInteractionComponent } from "../StudioInteraction";
+import { StudioInteractionComponent } from "../../App";
+import { TrueOrFalseInteractionInfo } from "./type";
 
 const TrueOrFalseInteractionStudio: StudioInteractionComponent<
-  "trueOrFalse"
+  TrueOrFalseInteractionInfo
 > = ({ value, onChange }) => {
   const handleChange = (isTrue: boolean) => {
     onChange({

@@ -1,12 +1,12 @@
-import { StudioInteractionComponent } from "../StudioInteraction";
+import { StudioInteractionComponent } from "../../App";
+import { MatchingInteractionInfo } from "./type";
 
 let id = 0;
 const makeId = () => (++id).toString();
 
-const MatchingInteractionStudio: StudioInteractionComponent<"matching"> = ({
-  value,
-  onChange,
-}) => {
+const MatchingInteractionStudio: StudioInteractionComponent<
+  MatchingInteractionInfo
+> = ({ value, onChange }) => {
   return (
     <div className="flex flex-col gap-3">
       {value.maching.map((item, i) => (

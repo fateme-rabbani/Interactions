@@ -1,10 +1,11 @@
-import { StudioInteractionComponent } from "../StudioInteraction";
+import { StudioInteractionComponent } from "../../App";
+import { MultipleChoiceInteractionInfo } from "./type";
 
 let id = 0;
 const makeId = () => (++id).toString();
 
 const MultipleChoiceInteractionStudio: StudioInteractionComponent<
-  "multipleChoice"
+  MultipleChoiceInteractionInfo
 > = ({ value, onChange }) => {
   return (
     <div className="flex flex-col gap-5">

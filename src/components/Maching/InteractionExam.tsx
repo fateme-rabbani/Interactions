@@ -1,10 +1,10 @@
-import { ExamInteractionComponent } from "../ExamInteraction";
+import { ExamInteractionComponent } from "../../App";
+import { MatchingInteractionInfo, MatchingResponseData } from "./type";
 
-const MatchingInteractionExam: ExamInteractionComponent<"matching"> = ({
-  interactionInfo,
-  value,
-  onChange,
-}) => {
+const MatchingInteractionExam: ExamInteractionComponent<
+  MatchingInteractionInfo,
+  MatchingResponseData
+> = ({ interactionInfo, value, onChange }) => {
   const optionsList = ["match 1", "match 2", "match 3"];
 
   return (
