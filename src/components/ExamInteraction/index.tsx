@@ -1,42 +1,14 @@
-import { FC } from "react";
 import {
-  Interaction,
-  InteractionInfo,
+  ExamInteractionComponent,
+  ExamInteractionComponentProps,
+  interactionMetas,
   InteractionType,
-  ResponseData,
 } from "../../App";
-
-import FreeResponseInteractionExam from "../FreeResponse/InteractionExam";
-import MatchingInteractionExam from "../Maching/InteractionExam";
-import MultipleChoiceInteractionExam from "../MultipleChoice/InteractionExam";
-import TrueOrFalseInteractionExam from "../TrueOrFalse/InteractionExam";
-
-export interface ExamInteractionProps<Type extends InteractionType> {
-  value: Interaction<Type>;
-  onChange(value: Interaction<Type>): void;
-}
-
-export interface InteractionComponentProps<Type extends InteractionType> {
-  interactionInfo: InteractionInfo<Type>;
-  value: ResponseData<Type>;
-  onChange(value: ResponseData<Type>): void;
-}
-
-export type ExamInteractionComponent<Type extends InteractionType> = FC<
-  InteractionComponentProps<Type>
->;
-
-const interactionComponents = {
-  freeResponse: FreeResponseInteractionExam,
-  multipleChoice: MultipleChoiceInteractionExam,
-  trueOrFalse: TrueOrFalseInteractionExam,
-  matching: MatchingInteractionExam,
-};
 
 export default function ExamInteraction<Type extends InteractionType>({
   value,
   onChange,
-}: ExamInteractionProps<Type>) {
+}: ExamInteractionComponentProps<Type>) {
   const ExamComponents = interactionComponents[
     value.type
   ] as ExamInteractionComponent<Type>;
