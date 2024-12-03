@@ -57,12 +57,12 @@ export type InteractionType = keyof typeof interactionMetas;
 export type InteractionInfo<Type extends InteractionType> =
   (typeof interactionMetas)[Type] extends InteractionMeta<infer II, any>
     ? II
-    : unknown;
+    : object;
 
 export type ResponseData<Type extends InteractionType> =
   (typeof interactionMetas)[Type] extends InteractionMeta<any, infer RD>
     ? RD
-    : unknown;
+    : object;
 
 export interface Interaction<Type extends InteractionType> {
   type: Type;
@@ -74,45 +74,49 @@ export interface Interaction<Type extends InteractionType> {
 }
 
 export default function App() {
+  // TODO: rename to 'mode'
   const [selectedQuestionType, setSelectedQuestionType] =
     useState<QuestionType | null>(null);
   const [selectedInteractionType, setSelectedInteractionType] =
     useState<InteractionType | null>(null);
-  const [interactionData, setInteractionData] =
-    useState<Interaction<InteractionType> | null>(null);
+
+  const [interactionData, setInteractionData] = useState<
+    Interaction<InteractionType>
+  >(null as never);
+
+  const [responseData, setResponseData] = useState<
+    ResponseData<InteractionType>
+  >(null as never);
 
   return (
     <div className="flex flex-col gap-20 w-full p-10">
-      {!selectedInteractionType && (
-        <>
-          {questionTypes.map((questionType) => (
-            <div className="flex flex-col gap-5">
-              <span className="p-5 rounded bg-slate-500 self-center">
-                {questionType}
-              </span>
-              {(
-                Object.keys(interactionMetas) as Array<
-                  keyof typeof interactionMetas
-                >
-              ).map((interactionType, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setSelectedInteractionType(interactionType);
-                    setSelectedQuestionType(questionType);
-                    setInteractionData(
-                      initialInteractionData(interactionType, questionType)
-                    );
-                  }}
-                  style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
-                >
-                  {interactionType}
-                </button>
-              ))}
-            </div>
-          ))}
-        </>
-      )}
+      {!selectedInteractionType &&
+        questionTypes.map((questionType) => (
+          <div key={questionType} className="flex flex-col gap-5">
+            <span className="p-5 rounded bg-slate-500 self-center">
+              {questionType}
+            </span>
+            {(
+              Object.keys(interactionMetas) as Array<
+                keyof typeof interactionMetas
+              >
+            ).map((interactionType, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setSelectedInteractionType(interactionType);
+                  setSelectedQuestionType(questionType);
+                  setInteractionData(
+                    initialInteractionData(interactionType, questionType)
+                  );
+                }}
+                style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
+              >
+                {interactionType}
+              </button>
+            ))}
+          </div>
+        ))}
 
       {selectedInteractionType && (
         <>

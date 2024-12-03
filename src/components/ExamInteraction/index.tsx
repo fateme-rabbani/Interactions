@@ -11,10 +11,7 @@ export default function ExamInteraction<Type extends InteractionType>({
   interactionInfo,
   value,
   onChange,
-}: ExamInteractionComponentProps<
-  InteractionInfo<Type> & object,
-  ResponseData<Type> & object
->) {
+}: ExamInteractionComponentProps<InteractionInfo<Type>, ResponseData<Type>>) {
   // const ExamComponent = interactionMetas[value.type]
   //   .examComponent as unknown as ExamInteractionComponent<
   //   InteractionInfo<Type>,
@@ -41,15 +38,15 @@ export default function ExamInteraction<Type extends InteractionType>({
       <button className="bg-[#16AE9E] rounded-xl px-2 self-end">
         subQuestion
       </button>
-      <div>{value.question}</div>
+      <div>{interactionInfo}</div>
       <div>
         Lorem سلام ipsum dolor sit amet, consectetur adipiscing elit, sed do
         eiusmod tempor?
       </div>
       <ExamComponent
         interactionInfo={interactionInfo}
-        value={value.responseData}
-        onChange={(responseData) => onChange({ ...value, responseData })}
+        value={value}
+        onChange={(value) => onChange(value)}
       />
       <div className="border w-fit border-[#16AE9E] px-2 rounded-xl text-[#16AE9E]">
         Score 1.5
