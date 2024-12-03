@@ -67,16 +67,14 @@ export type ResponseData<Type extends InteractionType> =
 export interface Interaction<Type extends InteractionType> {
   type: Type;
   question: string;
-  solution?: string;
-  difficulty?: string;
+  solution: string;
+  difficulty: string;
   interactionInfo: InteractionInfo<Type>;
-  responseData: ResponseData<Type>;
+  responseData?: ResponseData<Type>;
 }
 
 export default function App() {
-  // TODO: rename to 'mode'
-  const [selectedQuestionType, setSelectedQuestionType] =
-    useState<QuestionType | null>(null);
+  const [selectedMode, setSelectedMode] = useState<QuestionType | null>(null);
   const [selectedInteractionType, setSelectedInteractionType] =
     useState<InteractionType | null>(null);
 
@@ -105,10 +103,9 @@ export default function App() {
                 key={i}
                 onClick={() => {
                   setSelectedInteractionType(interactionType);
-                  setSelectedQuestionType(questionType);
-                  setInteractionData(
-                    initialInteractionData(interactionType, questionType)
-                  );
+                  setSelectedMode(questionType);
+                  setInteractionData(initialInteractionData(interactionType));
+                  setResponseData(initialResponseData(interactionType));
                 }}
                 style={{ background: "#ECFEFD", padding: 5, borderRadius: 5 }}
               >
@@ -120,16 +117,16 @@ export default function App() {
 
       {selectedInteractionType && (
         <>
-          {interactionData && selectedQuestionType === "studio" ? (
+          {interactionData && selectedMode === "studio" ? (
             <StudioInteraction
               value={interactionData}
               onChange={setInteractionData}
             />
-          ) : interactionData && selectedQuestionType === "exam" ? (
+          ) : interactionData && selectedMode === "exam" ? (
             <ExamInteraction
-              interactionInfo={interactionData.interactionInfo}
-              value={interactionData}
-              onChange={setInteractionData}
+              interaction={interactionData}
+              value={responseData}
+              onChange={setResponseData}
             />
           ) : null}
 
@@ -153,16 +150,9 @@ export default function App() {
   );
 }
 
-const initialInteractionData = (
-  type: InteractionType,
-  mode: QuestionType
-): Interaction<InteractionType> & {
-  responseData: ResponseData<InteractionType>;
-} => {
-  const isStudio = mode === "studio";
-
+const initialInteractionData = (type: InteractionType) => {
   const baseData = {
-    question: isStudio ? `Example Question for ${type}` : "Parent Question",
+    question: `Example Question for ${type}`,
     solution: "Sample Solution",
     difficulty: `difficulty-${
       type === "matching" || type === "freeResponse" ? "0" : "1"
@@ -173,52 +163,63 @@ const initialInteractionData = (
     case "freeResponse":
       return {
         ...baseData,
-        type: "freeResponse",
+        type: "freeResponse" as const,
         interactionInfo: {
           correctAnswer: "Sample Correct Answer",
-        },
-        responseData: {
-          answer: "",
         },
       };
     case "multipleChoice":
       return {
         ...baseData,
-        type: "multipleChoice",
+        type: "multipleChoice" as const,
         interactionInfo: {
           choices: [
             { id: "1", content: "Choice 1", isCorrect: false },
             { id: "2", content: "Choice 2", isCorrect: true },
           ],
         },
-        responseData: {
-          selectedChoices: [],
-        },
       };
     case "trueOrFalse":
       return {
         ...baseData,
-        type: "trueOrFalse",
+        type: "trueOrFalse" as const,
         interactionInfo: {
           isTrue: true,
-        },
-        responseData: {
-          isTrueOrFalse: null,
         },
       };
     case "matching":
       return {
         ...baseData,
-        type: "matching",
+        type: "matching" as const,
         interactionInfo: {
           maching: [
             { id: "1", firstVal: "Item 1", secondVal: "Match 1" },
             { id: "2", firstVal: "Item 2", secondVal: "Match 2" },
           ],
         },
-        responseData: {
-          selectedMatchMap: {},
-        },
+      };
+    default:
+      throw new Error("Unknown interaction type");
+  }
+};
+
+const initialResponseData = (type: InteractionType) => {
+  switch (type) {
+    case "freeResponse":
+      return {
+        answer: "",
+      };
+    case "multipleChoice":
+      return {
+        selectedChoices: [],
+      };
+    case "trueOrFalse":
+      return {
+        isTrueOrFalse: null,
+      };
+    case "matching":
+      return {
+        selectedMatchMap: {},
       };
     default:
       throw new Error("Unknown interaction type");

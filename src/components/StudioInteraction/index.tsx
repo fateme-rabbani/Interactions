@@ -1,15 +1,25 @@
+import { FC } from "react";
 import {
+  Interaction,
   InteractionInfo,
   interactionMetas,
   InteractionType,
   StudioInteractionComponent,
-  StudioInteractionComponentProps,
 } from "../../App";
+
+export interface InteractionComponentProps<Type extends InteractionType> {
+  value: Interaction<Type>;
+  onChange(value: Interaction<Type>): void;
+}
+
+export type StudioInteractionComp<Type extends InteractionType> = FC<
+  InteractionComponentProps<Type>
+>;
 
 export default function StudioInteraction<Type extends InteractionType>({
   value,
   onChange,
-}: StudioInteractionComponentProps<InteractionInfo<Type> & object>) {
+}: InteractionComponentProps<Type>) {
   const StudioComponent = interactionMetas[value.type]
     .studioComponent as unknown as StudioInteractionComponent<
     InteractionInfo<Type>
