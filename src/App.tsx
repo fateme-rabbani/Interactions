@@ -45,6 +45,7 @@ export interface InteractionMeta<
   examComponent: ExamInteractionComponent<interactionInfo, responseData>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const interactionMetas = {
   freeResponse: freeResponseInteractionMeta,
   multipleChoice: multipleChoiceInteractionMeta,
@@ -78,13 +79,11 @@ export default function App() {
   const [selectedInteractionType, setSelectedInteractionType] =
     useState<InteractionType | null>(null);
 
-  const [interactionData, setInteractionData] = useState<
-    Interaction<InteractionType>
-  >(null as never);
+  const [interactionData, setInteractionData] =
+    useState<Interaction<InteractionType> | null>(null);
 
-  const [responseData, setResponseData] = useState<
-    ResponseData<InteractionType>
-  >(null as never);
+  const [responseData, setResponseData] =
+    useState<ResponseData<InteractionType> | null>(null);
 
   return (
     <div className="flex flex-col gap-20 w-full p-10">
@@ -117,18 +116,23 @@ export default function App() {
 
       {selectedInteractionType && (
         <>
-          {interactionData && selectedMode === "studio" ? (
-            <StudioInteraction
-              value={interactionData}
-              onChange={setInteractionData}
-            />
-          ) : interactionData && selectedMode === "exam" ? (
-            <ExamInteraction
-              interaction={interactionData}
-              value={responseData}
-              onChange={setResponseData}
-            />
-          ) : null}
+          {interactionData && (
+            <>
+              {selectedMode === "studio" && (
+                <StudioInteraction
+                  value={interactionData}
+                  onChange={setInteractionData}
+                />
+              )}
+              {selectedMode === "exam" && responseData && (
+                <ExamInteraction
+                  interaction={interactionData}
+                  value={responseData}
+                  onChange={setResponseData}
+                />
+              )}
+            </>
+          )}
 
           <div className="flex gap-4 justify-end">
             <button
@@ -154,56 +158,49 @@ const initialInteractionData = (type: InteractionType) => {
   const baseData = {
     question: `Example Question for ${type}`,
     solution: "Sample Solution",
-    difficulty: `difficulty-${
-      type === "matching" || type === "freeResponse" ? "0" : "1"
-    }`,
+    difficulty: `difficulty-${Math.random() > 0.5 ? 0 : 1}`,
   };
 
-  switch (type) {
-    case "freeResponse":
-      return {
-        ...baseData,
-        type: "freeResponse" as const,
-        interactionInfo: {
-          correctAnswer: "Sample Correct Answer",
-        },
-      };
-    case "multipleChoice":
-      return {
-        ...baseData,
-        type: "multipleChoice" as const,
-        interactionInfo: {
-          choices: [
-            { id: "1", content: "Choice 1", isCorrect: false },
-            { id: "2", content: "Choice 2", isCorrect: true },
-          ],
-        },
-      };
-    case "trueOrFalse":
-      return {
-        ...baseData,
-        type: "trueOrFalse" as const,
-        interactionInfo: {
-          isTrue: true,
-        },
-      };
-    case "matching":
-      return {
-        ...baseData,
-        type: "matching" as const,
-        interactionInfo: {
-          maching: [
-            { id: "1", firstVal: "Item 1", secondVal: "Match 1" },
-            { id: "2", firstVal: "Item 2", secondVal: "Match 2" },
-          ],
-        },
-      };
-    default:
-      throw new Error("Unknown interaction type");
-  }
+  const specificData = {
+    freeResponse: {
+      type: "freeResponse" as const,
+      interactionInfo: {
+        correctAnswer: "Sample Correct Answer",
+      },
+    },
+    multipleChoice: {
+      type: "multipleChoice" as const,
+      interactionInfo: {
+        choices: [
+          { id: "1", content: "Choice 1", isCorrect: false },
+          { id: "2", content: "Choice 2", isCorrect: true },
+        ],
+      },
+    },
+    trueOrFalse: {
+      type: "trueOrFalse" as const,
+      interactionInfo: {
+        isTrue: true,
+      },
+    },
+    matching: {
+      type: "matching" as const,
+      interactionInfo: {
+        maching: [
+          { id: "1", firstVal: "Item 1", secondVal: "Match 1" },
+          { id: "2", firstVal: "Item 2", secondVal: "Match 2" },
+        ],
+      },
+    },
+  };
+
+  // if (!(type in specificData)) throw new Error("Unknown interaction type");
+
+  return { ...baseData, ...specificData[type] };
 };
 
 const initialResponseData = (type: InteractionType) => {
+  // TODO:
   switch (type) {
     case "freeResponse":
       return {

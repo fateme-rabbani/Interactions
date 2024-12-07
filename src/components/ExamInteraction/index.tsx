@@ -32,7 +32,7 @@ export default function ExamInteraction<Type extends InteractionType>({
         </div>
         <div className="flex gap-5 text-[#16AE9E]">
           <span>MARK</span>
-          <span>IGNOR</span>
+          <span>IGNORE</span>
           <span>REPORT</span>
         </div>
       </div>
