@@ -200,25 +200,22 @@ const initialInteractionData = (type: InteractionType) => {
 };
 
 const initialResponseData = (type: InteractionType) => {
-  // TODO:
-  switch (type) {
-    case "freeResponse":
-      return {
-        answer: "",
-      };
-    case "multipleChoice":
-      return {
-        selectedChoices: [],
-      };
-    case "trueOrFalse":
-      return {
-        isTrueOrFalse: null,
-      };
-    case "matching":
-      return {
-        selectedMatchMap: {},
-      };
-    default:
-      throw new Error("Unknown interaction type");
-  }
+  const specificData = {
+    freeResponse: {
+      answer: "",
+    },
+    multipleChoice: {
+      selectedChoices: [],
+    },
+    trueOrFalse: {
+      isTrueOrFalse: null,
+    },
+    matching: {
+      selectedMatchMap: {},
+    },
+  };
+
+  return {
+    ...specificData[type],
+  };
 };
